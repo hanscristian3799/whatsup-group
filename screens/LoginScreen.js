@@ -11,12 +11,9 @@ import { StatusBar } from "expo-status-bar";
 import stylesGlobal from "../styles/index";
 import { auth, signIn } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { setCurrentUser } from "../redux/slices/userSlice";
-import { useDispatch } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 
 const LoginScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +41,6 @@ const LoginScreen = ({ navigation }) => {
 
       if (res.status) {
         setIsLoading(false);
-        dispatch(setCurrentUser(res.user));
         navigation.replace("Home");
       } else {
         setIsLoading(false);

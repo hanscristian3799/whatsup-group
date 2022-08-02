@@ -9,20 +9,13 @@ import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { user } from "../redux/slices/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { clearCurrentUserData } from "../redux/slices/userSlice";
 
 const HomeScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-
   const [chats, setChats] = useState([]);
-  const currentUser = useSelector(user);
 
   const signUserOut = () => {
     signOut(auth)
       .then(() => {
-        dispatch(clearCurrentUserData());
         navigation.replace("Login");
       })
       .catch((err) => {
@@ -45,7 +38,7 @@ const HomeScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: currentUser.displayName,
+      title: auth?.currentUser?.displayName,
       headerTintColor: "white",
       headerLeft: () => (
         <View style={{ marginRight: 20 }}>

@@ -1,14 +1,8 @@
 import { StyleSheet } from "react-native";
 import Navigation from "./Navigation";
-import { store } from "./redux/store/index";
-import { Provider } from "react-redux";
 
 export default function App() {
-  return (
-    <Provider store={store}>
-      <Navigation />
-    </Provider>
-  );
+  return <Navigation />;
 }
 
 const styles = StyleSheet.create({
