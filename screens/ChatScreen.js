@@ -138,7 +138,7 @@ const ChatScreen = ({ navigation, route }) => {
                 onChangeText={(text) => setInput(text)}
               />
               <TouchableOpacity onPress={send}>
-                <Ionicons name="send" size={24} color="#2C6BED" />
+                <Ionicons name="send" size={24} color="#00CC66" />
               </TouchableOpacity>
             </View>
           </>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   me: {
     position: "relative",
     alignSelf: "flex-end",
-    backgroundColor: "#2C6BED",
+    backgroundColor: "#00CC66",
     marginVertical: 10,
     marginEnd: 5,
     paddingVertical: 10,

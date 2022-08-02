@@ -68,9 +68,6 @@ const HomeScreen = ({ navigation }) => {
             marginRight: 10,
           }}
         >
-          <TouchableOpacity>
-            <AntDesign size={24} color="white" name="camerao" />
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("AddChat")}>
             <AntDesign size={24} color="white" name="edit" />
           </TouchableOpacity>

@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Button, Input, Image } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
 import stylesGlobal from "../styles/index";
@@ -7,6 +13,7 @@ import { auth, signIn } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { setCurrentUser } from "../redux/slices/userSlice";
 import { useDispatch } from "react-redux";
+import { Entypo } from "@expo/vector-icons";
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -23,6 +30,12 @@ const LoginScreen = ({ navigation }) => {
 
   //   return unsubscribe;
   // }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
 
   const handleSignIn = async () => {
     try {
@@ -46,12 +59,8 @@ const LoginScreen = ({ navigation }) => {
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <StatusBar style="light" />
-      <Image
-        source={{
-          uri: "https://blog.mozilla.org/internetcitizen/files/2018/08/signal-logo.png",
-        }}
-        style={{ width: 200, height: 200 }}
-      />
+
+      <Entypo name="chat" size={180} color="#00CC66" style={{marginBottom: 30}} />
 
       <View style={styles.input}>
         <Input
@@ -73,19 +82,19 @@ const LoginScreen = ({ navigation }) => {
         containerStyle={stylesGlobal.authButton}
         disabled={isLoading}
         loading={isLoading}
-        color="#2C6BED"
+        color="#00CC66"
         title="Login"
         onPress={handleSignIn}
       />
-      <Button
-        containerStyle={stylesGlobal.authButton}
-        disabled={isLoading}
-        color="#2C6BED"
-        title="Register"
-        type="outline"
-        onPress={() => navigation.navigate("Register")}
-      />
-      <View style={{ height: 50 }}></View>
+
+      <View style={styles.registerSuggestContainer}>
+        <Text style={{marginRight: 5}}>Dont have an account?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={{ color: "#00CC66", fontWeight: "700" }}>
+            Register here!
+          </Text>
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -99,6 +108,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     padding: 10,
+  },
+  registerSuggestContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
   },
   input: {
     width: 300,

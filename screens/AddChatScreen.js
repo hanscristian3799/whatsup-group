@@ -39,7 +39,7 @@ const AddChatScreen = ({ navigation }) => {
         disabled={isLoading}
         loading={isLoading}
         title="Add Chat"
-        color="#2C6BED"
+        color="#00CC66"
         onPress={addNewChat}
       />
     </View>

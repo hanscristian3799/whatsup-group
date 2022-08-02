@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   primaryColor: {
-    color: "#2C6BED",
+    color: "#00CC66",
   },
   authButton: {
     width: 300,
