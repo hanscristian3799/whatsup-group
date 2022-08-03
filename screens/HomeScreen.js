@@ -4,11 +4,11 @@ import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native";
 import ChatItem from "../components/ChatItem";
 import { TouchableOpacity } from "react-native";
-import { Avatar } from "@rneui/themed";
+import { Avatar, FAB } from "@rneui/themed";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { collection, doc, onSnapshot } from "firebase/firestore";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
@@ -36,39 +36,6 @@ const HomeScreen = ({ navigation }) => {
     return unsubscribe;
   }, []);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: auth?.currentUser?.displayName,
-      headerTintColor: "white",
-      headerLeft: () => (
-        <View style={{ marginRight: 20 }}>
-          <TouchableOpacity onPress={signUserOut}>
-            <Avatar
-              rounded
-              source={{
-                uri: auth?.currentUser?.photoURL,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-      ),
-      headerRight: () => (
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: 70,
-            marginRight: 10,
-          }}
-        >
-          <TouchableOpacity onPress={() => navigation.navigate("AddChat")}>
-            <AntDesign size={24} color="white" name="edit" />
-          </TouchableOpacity>
-        </View>
-      ),
-    });
-  }, []);
-
   const enterChat = (id, chatName) => {
     navigation.navigate("Chat", {
       id,
@@ -77,8 +44,8 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
-      <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.chatsContainer}>
         {chats.map(({ id, data: { chatName } }) => (
           <ChatItem
             key={id}
@@ -88,6 +55,14 @@ const HomeScreen = ({ navigation }) => {
           />
         ))}
       </ScrollView>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("AddChat")}
+        style={[styles.addChat, styles.shadow]}
+      >
+        <View>
+          <MaterialIcons name="chat" size={24} color="#00CC66" />
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -96,6 +71,30 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+    position: "relative",
+  },
+  chatsContainer: {
     height: "100%",
+  },
+  addChat: {
+    position: "absolute",
+    bottom: 30,
+    right: 30,
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    backgroundColor: "#FFFF",
+    shadowColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  shadow: {
+    //IOS
+    // shadowColor: "#808080",
+    // shadowOffset: {width: -2, height: 4},
+    // shadowOpacity: 0.2,
+    // shadowRadius: 3,
+    elevation: 5,
+    shadowColor: "#808080",
   },
 });

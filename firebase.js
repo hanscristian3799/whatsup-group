@@ -2,7 +2,6 @@ import { initializeApp } from "firebase/app";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   createUserWithEmailAndPassword,
-  getAuth,
   updateProfile,
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -13,7 +12,6 @@ import {
 } from "firebase/auth/react-native";
 import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBeiO77Ec5qd0DEn10BsKFYYtgdib45wNw",
   authDomain: "signal-clone-b6a57.firebaseapp.com",
@@ -51,7 +49,6 @@ export const checkUser = async () => {
 
 export const signIn = async (email, password) => {
   const loggedUser = await signInWithEmailAndPassword(auth, email, password);
-  console.log("LOGGED", loggedUser.user.stsTokenManager.accessToken);
   if (loggedUser) {
     const user = {
       displayName: loggedUser.user.displayName,

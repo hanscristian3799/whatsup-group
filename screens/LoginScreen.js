@@ -6,27 +6,27 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, Input, Image } from "@rneui/base";
+import { Button, Input } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
 import stylesGlobal from "../styles/index";
-import { auth, signIn } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { signIn, auth } from "../firebase";
 import { Entypo } from "@expo/vector-icons";
+import { onAuthStateChanged } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       navigation.replace("Home");
-  //     }
-  //   });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.replace("Main");
+      }
+    });
 
-  //   return unsubscribe;
-  // }, []);
+    return unsubscribe;
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,7 +41,7 @@ const LoginScreen = ({ navigation }) => {
 
       if (res.status) {
         setIsLoading(false);
-        navigation.replace("Home");
+        navigation.replace("Main");
       } else {
         setIsLoading(false);
         alert("Something wrong");

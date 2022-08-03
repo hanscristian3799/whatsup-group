@@ -10,6 +10,7 @@ import { StatusBar } from "expo-status-bar";
 import stylesGlobal from "../styles/index";
 import { firebaseSignUp } from "../firebase";
 import { AntDesign } from "@expo/vector-icons";
+import HeaderBackButton from "../components/HeaderBackButton";
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -43,12 +44,7 @@ const RegisterScreen = ({ navigation }) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <StatusBar style="light" />
 
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <AntDesign name="arrowleft" size={36} color="#00CC66" />
-      </TouchableOpacity>
+      <HeaderBackButton navigation={navigation} color="#00CC66" />
 
       <Text h3>Join Chat Communities</Text>
 

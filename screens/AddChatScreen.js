@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Button, Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
+import HeaderBackButton from "../components/HeaderBackButton";
 
 const AddChatScreen = ({ navigation }) => {
   const [input, setInput] = useState("");
@@ -28,20 +29,26 @@ const AddChatScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Input
-        placeholder="Chat name"
-        type="text"
-        value={input}
-        onChangeText={(text) => setInput(text)}
-        leftIcon={<Icon name="wechat" size={24} style={{ marginRight: 10 }} />}
-      />
-      <Button
-        disabled={isLoading}
-        loading={isLoading}
-        title="Add Chat"
-        color="#00CC66"
-        onPress={addNewChat}
-      />
+      <View style={{marginTop: 100}}>
+        <Input
+          placeholder="Chat name"
+          type="text"
+          value={input}
+          onChangeText={(text) => setInput(text)}
+          leftIcon={
+            <Icon name="wechat" size={24} style={{ marginRight: 10 }} />
+          }
+        />
+        <Button
+          disabled={isLoading}
+          loading={isLoading}
+          title="Add Chat"
+          color="#00CC66"
+          onPress={addNewChat}
+        />
+      </View>
+
+      <HeaderBackButton navigation={navigation} />
     </View>
   );
 };
@@ -51,7 +58,8 @@ export default AddChatScreen;
 const styles = StyleSheet.create({
   container: {
     height: "100%",
-    padding: 30,
+    padding: 40,
     backgroundColor: "white",
+    position: "relative",
   },
 });
