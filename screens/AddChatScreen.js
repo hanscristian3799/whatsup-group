@@ -19,8 +19,9 @@ const AddChatScreen = ({ navigation }) => {
       if (writtenDoc) {
         setIsLoading(false);
         navigation.goBack();
+      } else {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       alert(error.message);

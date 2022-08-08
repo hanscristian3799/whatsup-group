@@ -24,7 +24,8 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import { Avatar } from "@rneui/base";
+import { Avatar, Divider } from "@rneui/base";
+import HeaderBackButton from "../components/HeaderBackButton";
 
 const ChatScreen = ({ navigation, route }) => {
   const [input, setInput] = useState("");
@@ -32,28 +33,15 @@ const ChatScreen = ({ navigation, route }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerShown: true,
       title: "",
       headerLeft: () => (
         <View style={styles.headerStyle}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
+            <AntDesign name="arrowleft" size={24} color="#000" />
           </TouchableOpacity>
+
           <Text style={styles.headerTitle}>{route.params.chatName}</Text>
-        </View>
-      ),
-      headerRight: () => (
-        <View style={styles.headerStyle}>
-          <TouchableOpacity>
-            <AntDesign
-              name="phone"
-              size={24}
-              color="white"
-              style={{ marginRight: 15 }}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <AntDesign name="videocamera" size={24} color="white" />
-          </TouchableOpacity>
         </View>
       ),
     });
@@ -120,10 +108,9 @@ const ChatScreen = ({ navigation, route }) => {
                       source={{ uri: data.photoURL }}
                       rounded
                       size={30}
-                      // style={styles.profileAvatar}
                     />
-                    <Text>{data.message}</Text>
-                    {/* <Divider /> */}
+                    <Text style={{marginBottom: 10}}>{data.message}</Text>
+                    <Divider />
                     <Text style={styles.othersName}>{data.displayName}</Text>
                   </View>
                 )
@@ -157,7 +144,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    color: "white",
+    color: "#000",
     marginLeft: 10,
     fontWeight: "600",
   },
@@ -185,6 +172,7 @@ const styles = StyleSheet.create({
   chatContainer: {
     flexDirection: "column-reverse",
     paddingVertical: 15,
+    backgroundColor: "#ECECEC",
   },
   me: {
     position: "relative",
@@ -208,7 +196,7 @@ const styles = StyleSheet.create({
   other: {
     position: "relative",
     alignSelf: "flex-start",
-    backgroundColor: "#ECECEC",
+    backgroundColor: "#FFF",
     marginVertical: 10,
     marginStart: 10,
     paddingVertical: 10,
@@ -220,6 +208,6 @@ const styles = StyleSheet.create({
   othersName: {
     marginStart: 10,
     paddingTop: 10,
-    fontWeight: "700"
-  }
+    fontWeight: "700",
+  },
 });
