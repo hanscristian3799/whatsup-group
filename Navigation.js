@@ -13,10 +13,10 @@ const globalScreenOptions = {
   headerShown: false,
 };
 
-const Navigation = () => {
+const Navigation = ({initialRoute}) => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={globalScreenOptions}>
+      <Stack.Navigator initialRouteName={initialRoute} screenOptions={globalScreenOptions}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />

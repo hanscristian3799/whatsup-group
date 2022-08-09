@@ -25,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
       }
     });
 
-    return unsubscribe;
+    return unsubscribe();
   }, []);
 
   useLayoutEffect(() => {

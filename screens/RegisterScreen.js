@@ -5,12 +5,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, Input, Icon, Text } from "@rneui/base";
+import { Button, Input, Icon, Text, Avatar } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
 import stylesGlobal from "../styles/index";
-import { firebaseSignUp } from "../firebase";
-import { AntDesign } from "@expo/vector-icons";
+import { firebaseSignUp, uploadProfilePicture } from "../firebase";
 import HeaderBackButton from "../components/HeaderBackButton";
+import * as ImagePicker from "expo-image-picker";
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -25,18 +25,49 @@ const RegisterScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
+  const uploadFile = async (imageUrl, userId) => {
+    const data = await uploadProfilePicture(imageUrl, userId);
+    if (data.status) return true;
+    return false;
+  };
+
   const register = async () => {
     try {
       setIsLoading(true);
       const user = await firebaseSignUp(email, fullName, password, imageUrl);
       if (user) {
-        setIsLoading(false);
-        navigation.goBack();
+        if (imageUrl) {
+          const uploadFileStatus = await uploadFile(imageUrl, user);
+          if (uploadFileStatus) {
+            setIsLoading(false);
+            navigation.replace("Login")
+          } else {
+            setIsLoading(false);
+          }
+        } else {
+          setIsLoading(false);
+          navigation.replace("Login")
+        }
       }
     } catch (error) {
       setIsLoading(false);
-
       alert(error.message);
+    }
+  };
+
+  const showImagePicker = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("You've to accept the permission to add a profile photo!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+
+    if (!result.cancelled) {
+      setImageUrl(result.uri);
     }
   };
 
@@ -51,6 +82,25 @@ const RegisterScreen = ({ navigation }) => {
       <Text style={{ marginBottom: 50, fontSize: 20, color: "grey" }}>
         Create an account
       </Text>
+
+      <TouchableOpacity activeOpacity={0.5} onPress={showImagePicker}>
+        {imageUrl ? (
+          <Avatar
+            source={{
+              uri: imageUrl,
+            }}
+            rounded
+            size={96}
+          />
+        ) : (
+          <Avatar
+            icon={{ name: "image", type: "font-awesome" }}
+            containerStyle={{ backgroundColor: "#00CC66" }}
+            rounded
+            size={96}
+          />
+        )}
+      </TouchableOpacity>
 
       <View style={styles.input}>
         <Input
@@ -72,19 +122,12 @@ const RegisterScreen = ({ navigation }) => {
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
-        <Input
-          placeholder="Image URL"
-          type="text"
-          value={imageUrl}
-          onChangeText={(text) => setImageUrl(text)}
-          onSubmitEditing={register}
-        />
       </View>
 
       <Button
         containerStyle={stylesGlobal.authButton}
         loading={isLoading}
-        disabled={isLoading}
+        disabled={isLoading || !fullName || !email || !password}
         color="#00CC66"
         raised
         title="Register"
@@ -131,5 +174,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 300,
+    marginTop: 20,
   },
 });

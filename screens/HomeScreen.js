@@ -23,7 +23,6 @@ const HomeScreen = ({ navigation }) => {
         );
       },
       (error) => {
-        console.log("ERROR", error);
         alert("Something's wrong");
       }
     );

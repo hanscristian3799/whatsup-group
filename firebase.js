@@ -11,6 +11,7 @@ import {
   getReactNativePersistence,
 } from "firebase/auth/react-native";
 import { getFirestore } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBeiO77Ec5qd0DEn10BsKFYYtgdib45wNw",
@@ -19,6 +20,7 @@ const firebaseConfig = {
   storageBucket: "signal-clone-b6a57.appspot.com",
   messagingSenderId: "325390587144",
   appId: "1:325390587144:web:10717451e46be32ed288bd",
+  storageBucket: "gs://signal-clone-b6a57.appspot.com",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -27,6 +29,7 @@ export const db = getFirestore(app);
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
+export const storage = getStorage(app);
 
 export const firebaseSignUp = async (email, name, password, imageUrl) => {
   const { user } = await createUserWithEmailAndPassword(auth, email, password);
@@ -59,4 +62,34 @@ export const signIn = async (email, password) => {
     return { status: true, user };
   }
   return { status: false };
+};
+
+export const uploadProfilePicture = async (imgUrl, userId) => {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+
+    xhr.onerror = function () {
+      reject(new TypeError("Network request error!"));
+    };
+
+    xhr.responseType = "blob";
+    xhr.open("GET", imgUrl, true);
+    xhr.send(null);
+  });
+
+  const storageRef = ref(storage, `user/${userId}`);
+  const upload = await uploadBytes(storageRef, blob);
+  if (upload.metadata.timeCreated) {
+    return {
+      status: true,
+      data: upload.metadata.timeCreated,
+    };
+  }
+  return {
+    status: false,
+    msg: err.message,
+  };
 };

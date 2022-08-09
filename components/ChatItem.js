@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Avatar, ListItem } from "@rneui/themed";
 import {
   doc,
-  addDoc,
-  serverTimestamp,
   collection,
   onSnapshot,
   query,

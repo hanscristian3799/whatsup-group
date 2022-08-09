@@ -1,7 +1,6 @@
 import {
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -25,7 +24,6 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { Avatar, Divider } from "@rneui/base";
-import HeaderBackButton from "../components/HeaderBackButton";
 
 const ChatScreen = ({ navigation, route }) => {
   const [input, setInput] = useState("");
