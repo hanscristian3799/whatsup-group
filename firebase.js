@@ -11,7 +11,12 @@ import {
   getReactNativePersistence,
 } from "firebase/auth/react-native";
 import { getFirestore } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBeiO77Ec5qd0DEn10BsKFYYtgdib45wNw",
@@ -35,9 +40,6 @@ export const firebaseSignUp = async (email, name, password, imageUrl) => {
   const { user } = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(user, {
     displayName: name,
-    photoURL:
-      imageUrl ||
-      "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
   });
   return user.uid;
 };
@@ -92,4 +94,23 @@ export const uploadProfilePicture = async (imgUrl, userId) => {
     status: false,
     msg: err.message,
   };
+};
+
+export const updateProfilePicture = async (userId) => {
+  const storageRef = ref(storage, `user/${userId}`);
+  getDownloadURL(storageRef).then((url) => {
+    updateProfile(auth.currentUser, {
+      photoURL: url,
+    })
+  });
+};
+
+export const updateUserProfile = async (newName, imageUrl) => {
+  await updateProfile(auth.currentUser, {
+    displayName: newName,
+  });
+  if (imageUrl) {
+    await uploadProfilePicture(imageUrl, auth.currentUser.uid);
+    await updateProfilePicture(auth.currentUser.uid);
+  }
 };

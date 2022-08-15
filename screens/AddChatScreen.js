@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import React, { useState } from "react";
 import { Button, Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { db } from "../firebase";

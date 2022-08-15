@@ -5,10 +5,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, Input, Icon, Text, Avatar } from "@rneui/base";
+import { Button, Input, Text, Avatar } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
 import stylesGlobal from "../styles/index";
-import { firebaseSignUp, uploadProfilePicture } from "../firebase";
+import { firebaseSignUp, updateProfilePicture, uploadProfilePicture } from "../firebase";
 import HeaderBackButton from "../components/HeaderBackButton";
 import * as ImagePicker from "expo-image-picker";
 
@@ -39,6 +39,7 @@ const RegisterScreen = ({ navigation }) => {
         if (imageUrl) {
           const uploadFileStatus = await uploadFile(imageUrl, user);
           if (uploadFileStatus) {
+            await updateProfilePicture(user);
             setIsLoading(false);
             navigation.replace("Login")
           } else {

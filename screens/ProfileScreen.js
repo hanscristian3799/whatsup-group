@@ -1,12 +1,33 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect } from "react";
 import { Avatar } from "@rneui/base";
 import { auth } from "../firebase";
-import { Button } from "@rneui/base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
+import { user } from "../redux/slices/userSlice";
+import { useSelector } from "react-redux";
+
+const buttonItems = [
+  {
+    title: "Logout",
+    iconName: "exit-to-app",
+  },
+  {
+    title: "Edit Profile",
+    iconName: "account-edit",
+    screen: "EditProfile",
+  },
+];
 
 const ProfileScreen = ({ navigation }) => {
+  const currUser = useSelector(user)
+
   const signUserOut = () => {
     signOut(auth)
       .then(() => {
@@ -19,34 +40,50 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.profileContainer}>
-      <Avatar
-        source={{
-          uri: auth.currentUser.photoURL,
-        }}
-        rounded
-        size={96}
-      />
+      {currUser.photoURL ? (
+        <Avatar
+          source={{
+            uri: currUser.photoURL,
+          }}
+          rounded
+          size={96}
+        />
+      ) : (
+        <Avatar
+          icon={{ name: "person", type: "material" }}
+          containerStyle={{ backgroundColor: "#CCCC" }}
+          rounded
+          size={96}
+        />
+      )}
+
       <View style={styles.nameContainer}>
         <View style={styles.onlineStatus}></View>
-        <Text style={styles.displayName}>{auth.currentUser.displayName}</Text>
+        <Text style={styles.displayName}>{currUser.displayName}</Text>
       </View>
-      <Text style={styles.email}>{auth.currentUser.email}</Text>
-      <Button
-        containerStyle={{ width: 150, marginTop: 20 }}
-        buttonStyle={{ borderColor: "#000" }}
-        title="Logout"
-        type="outline"
-        titleStyle={{ color: "#000" }}
-        icon={
-          <MaterialCommunityIcons
-            name="exit-to-app"
-            size={24}
-            color="black"
-            style={{ marginRight: 10 }}
-          />
-        }
-        onPress={signUserOut}
-      />
+      <Text style={styles.email}>{currUser.email}</Text>
+
+      {buttonItems.map((item, index) => {
+        return (
+          <TouchableOpacity
+            key={index}
+            style={styles.profileButton}
+            onPress={() =>
+              item.title === "Logout"
+                ? signUserOut()
+                : navigation.navigate(item.screen)
+            }
+          >
+            <MaterialCommunityIcons
+              name={item.iconName}
+              size={24}
+              color="black"
+              style={{ marginRight: 10 }}
+            />
+            <Text style={styles.buttonText}>{item.title}</Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
@@ -80,5 +117,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: "500",
     fontSize: 18,
+  },
+  profileButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: 150,
+    marginTop: 20,
+    borderWidth: 0.5,
+    borderColor: "#000",
+    padding: 8,
+    borderRadius: 2,
+  },
+  buttonText: {
+    flex: 1,
+    color: "#000",
+    fontWeight: "500",
+    fontSize: 16,
   },
 });

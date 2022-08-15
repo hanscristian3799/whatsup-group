@@ -12,8 +12,11 @@ import stylesGlobal from "../styles/index";
 import { signIn, auth } from "../firebase";
 import { Entypo } from "@expo/vector-icons";
 import { onAuthStateChanged } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/slices/userSlice";
 
 const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +44,7 @@ const LoginScreen = ({ navigation }) => {
 
       if (res.status) {
         setIsLoading(false);
+        dispatch(setUser(res.user));
         navigation.replace("Main");
       } else {
         setIsLoading(false);
@@ -56,7 +60,12 @@ const LoginScreen = ({ navigation }) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <StatusBar style="light" />
 
-      <Entypo name="chat" size={180} color="#00CC66" style={{marginBottom: 30}} />
+      <Entypo
+        name="chat"
+        size={180}
+        color="#00CC66"
+        style={{ marginBottom: 30 }}
+      />
 
       <View style={styles.input}>
         <Input
@@ -84,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
       />
 
       <View style={styles.registerSuggestContainer}>
-        <Text style={{marginRight: 5}}>Dont have an account?</Text>
+        <Text style={{ marginRight: 5 }}>Dont have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text style={{ color: "#00CC66", fontWeight: "700" }}>
             Register here!
